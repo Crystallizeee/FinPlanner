@@ -153,4 +153,68 @@ class AuthAndMultiTenancyTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Action Points');
     }
+
+    public function test_user_can_set_category_budget_and_manage_subscriptions(): void
+    {
+        $user = User::factory()->create();
+
+        // 1. Category Budget Test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\CategoryBudgetsComponent::class)
+            ->set('category', 'food')
+            ->set('amount_limit', 2000000)
+            ->call('setBudget')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('category_budgets', [
+            'user_id' => $user->id,
+            'category' => 'food',
+            'amount_limit' => 2000000,
+        ]);
+
+        // 2. Subscriptions Test
+        $account = Account::create([
+            'user_id' => $user->id,
+            'name' => 'Main Bank',
+            'type' => 'bank',
+            'balance' => 5000000,
+        ]);
+
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\SubscriptionsComponent::class)
+            ->set('title', 'Netflix Premium')
+            ->set('amount', 186000)
+            ->set('due_day', 15)
+            ->set('account_id', $account->id)
+            ->call('addSubscription')
+            ->assertHasNoErrors();
+
+        $sub = $user->recurringExpenses()->where('title', 'Netflix Premium')->first();
+        $this->assertNotNull($sub);
+
+        // Pay subscription bill
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\SubscriptionsComponent::class)
+            ->call('payBill', $sub->id)
+            ->assertHasNoErrors();
+
+        $this->assertEquals(5000000 - 186000, $account->fresh()->balance);
+
+        // 3. Investment Assets Test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\PortfolioComponent::class)
+            ->set('asset_name', 'BBCA')
+            ->set('asset_type', 'Saham')
+            ->set('quantity', 100)
+            ->set('purchase_price', 9000)
+            ->set('current_price', 10000)
+            ->call('addAsset')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('investment_assets', [
+            'user_id' => $user->id,
+            'asset_name' => 'BBCA',
+            'current_price' => 10000,
+        ]);
+    }
 }

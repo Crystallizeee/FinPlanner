@@ -38,4 +38,14 @@ class Account extends Model
     {
         return $this->hasMany(ExpenseTransaction::class);
     }
+
+    public function deductBalance(float $amount): void
+    {
+        $this->decrement('balance', $amount);
+    }
+
+    public function addBalance(float $amount): void
+    {
+        $this->increment('balance', $amount);
+    }
 }

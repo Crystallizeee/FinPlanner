@@ -123,6 +123,30 @@ class User extends Authenticatable
     }
 
     /**
+     * User's category budgets.
+     */
+    public function categoryBudgets(): HasMany
+    {
+        return $this->hasMany(CategoryBudget::class);
+    }
+
+    /**
+     * User's recurring expenses/subscriptions.
+     */
+    public function recurringExpenses(): HasMany
+    {
+        return $this->hasMany(RecurringExpense::class);
+    }
+
+    /**
+     * User's investment assets.
+     */
+    public function investmentAssets(): HasMany
+    {
+        return $this->hasMany(InvestmentAsset::class);
+    }
+
+    /**
      * Check if user is currently in critical HP status (< 20%).
      */
     public function hasCriticalHp(): bool

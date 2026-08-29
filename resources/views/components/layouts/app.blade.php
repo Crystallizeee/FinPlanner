@@ -94,6 +94,14 @@
                     <span>{{ $labels['nav_budget'] }}</span>
                 </a>
 
+                <a href="{{ route('category-budgets') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('category-budgets') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
+                    <span>🛡️ Limit Kategori</span>
+                </a>
+
+                <a href="{{ route('subscriptions') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('subscriptions') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
+                    <span>🔄 Tagihan Rutin</span>
+                </a>
+
                 <a href="{{ route('goals') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('goals') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
                     <span>{{ $labels['nav_goals'] }}</span>
                 </a>

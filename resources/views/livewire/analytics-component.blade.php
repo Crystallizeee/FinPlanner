@@ -3,13 +3,20 @@
 @endphp
 
 <div class="space-y-6">
-    <!-- Header -->
-    <div class="p-6 rounded-3xl {{ $tokens['card_bg'] }}">
-        <h1 class="{{ $tokens['font_heading'] }} text-2xl text-white flex items-center space-x-2">
-            <span>📈</span>
-            <span>Analytics & AI Financial Insights</span>
-        </h1>
-        <p class="text-xs text-slate-400 mt-1">Evaluasi tren alokasi dana, rasio tabungan, dan proyeksi kekayaan otomatis.</p>
+    <!-- Header with Export Action -->
+    <div class="p-6 rounded-3xl {{ $tokens['card_bg'] }} flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="{{ $tokens['font_heading'] }} text-2xl text-white flex items-center space-x-2">
+                <span>📈</span>
+                <span>Analytics & AI Financial Insights</span>
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">Evaluasi tren alokasi dana, rasio tabungan, dan ekspor laporan keuangan.</p>
+        </div>
+
+        <button wire:click="exportCsv" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs font-mono shadow-lg transition-all flex items-center space-x-2 shrink-0">
+            <span>📥</span>
+            <span>Ekspor Laporan Keuangan (.CSV)</span>
+        </button>
     </div>
 
     <!-- AI Insights Section -->
@@ -22,114 +29,51 @@
             <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
                 <div class="text-emerald-400 font-bold flex items-center space-x-1">
                     <span>📈</span>
-                    <span>Rasio Tabungan Meningkat</span>
+                    <span>Total Struk Terverifikasi</span>
                 </div>
-                <p class="text-slate-300">"You saved <strong>12% more</strong> than last month due to lower dining expenses."</p>
+                <p class="text-slate-300">Terdapat <strong>{{ $receiptCount }} struk OCR</strong> dan <strong>{{ $bankSyncCount }} webhook bank</strong> yang tercatat secara sah.</p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
                 <div class="text-amber-400 font-bold flex items-center space-x-1">
                     <span>⚡</span>
-                    <span>Proyeksi Target Dana Darurat</span>
+                    <span>Status Pengeluaran Bulanan</span>
                 </div>
-                <p class="text-slate-300">"At your current saving rate, you'll reach your Emergency Fund goal <strong>2 months early</strong>."</p>
+                <p class="text-slate-300">Total akumulasi pengeluaran Anda saat ini adalah <strong>Rp {{ number_format($totalSpent, 0, ',', '.') }}</strong>.</p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2">
                 <div class="text-purple-400 font-bold flex items-center space-x-1">
                     <span>🍲</span>
-                    <span>Kenaikan Pengeluaran Makanan</span>
+                    <span>Distribusi Kategori Utama</span>
                 </div>
-                <p class="text-slate-300">"Your Food spending increased <strong>18%</strong> compared to last month. Consider meal planning."</p>
+                <p class="text-slate-300">Terdapat <strong>{{ count($categoryBreakdown) }} kategori</strong> aktif dengan pencatatan pengeluaran bulan ini.</p>
             </div>
         </div>
     </div>
 
-    <!-- Charts Grid -->
+    <!-- Interactive Charts Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- 1. Income vs Expense Bar Chart -->
+        <!-- 1. Interactive Monthly Trend Chart -->
         <div class="lg:col-span-7 p-6 rounded-3xl {{ $tokens['card_bg'] }} space-y-4">
             <div class="flex items-center justify-between">
-                <h3 class="{{ $tokens['font_heading'] }} text-base text-white">Income vs Expense Trend</h3>
-                <span class="text-xs font-mono text-slate-400">Last 6 Months</span>
+                <h3 class="{{ $tokens['font_heading'] }} text-base text-white">Tren Pengeluaran (6 Bulan Terakhir)</h3>
+                <span class="text-xs font-mono text-slate-400">Monthly Aggregates</span>
             </div>
 
-            <!-- Simulated SVG Bar Chart -->
-            <div class="h-64 flex items-end justify-between gap-4 pt-8 px-4 bg-slate-950/60 rounded-2xl border border-slate-800 text-[10px] font-mono">
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 70%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 50%;"></div>
-                    </div>
-                    <span class="text-slate-400">Mar</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 75%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 55%;"></div>
-                    </div>
-                    <span class="text-slate-400">Apr</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 80%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 60%;"></div>
-                    </div>
-                    <span class="text-slate-400">May</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 85%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 62%;"></div>
-                    </div>
-                    <span class="text-slate-400">Jun</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 90%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 65%;"></div>
-                    </div>
-                    <span class="text-slate-400">Jul</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-full">
-                    <div class="w-full flex items-end justify-center gap-1.5 h-44">
-                        <div class="w-4 bg-emerald-400 rounded-t-sm" style="height: 100%;"></div>
-                        <div class="w-4 bg-rose-400 rounded-t-sm" style="height: 68%;"></div>
-                    </div>
-                    <span class="text-cyan-400 font-bold">Aug</span>
-                </div>
-            </div>
-
-            <div class="flex justify-center space-x-6 text-xs font-mono">
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 bg-emerald-400 rounded-sm"></div>
-                    <span class="text-slate-300">Income (Rp8.5M avg)</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 bg-rose-400 rounded-sm"></div>
-                    <span class="text-slate-300">Expense (Rp5.75M avg)</span>
-                </div>
+            <div class="p-4 bg-slate-950/60 rounded-2xl border border-slate-800">
+                <canvas id="monthlyTrendChart" class="w-full max-h-64"></canvas>
             </div>
         </div>
 
-        <!-- 2. Category Distribution Donut -->
+        <!-- 2. Category Distribution Donut Chart -->
         <div class="lg:col-span-5 p-6 rounded-3xl {{ $tokens['card_bg'] }} space-y-4 flex flex-col justify-between">
-            <h3 class="{{ $tokens['font_heading'] }} text-base text-white">Category Distribution</h3>
+            <h3 class="{{ $tokens['font_heading'] }} text-base text-white">Category Spending Distribution</h3>
 
-            <div class="flex items-center justify-center p-4">
-                <div class="relative w-44 h-44 flex items-center justify-center">
-                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="38" stroke="#3b82f6" stroke-width="12" stroke-dasharray="238.7" stroke-dashoffset="60" fill="transparent"/>
-                        <circle cx="50" cy="50" r="38" stroke="#10b981" stroke-width="12" stroke-dasharray="238.7" stroke-dashoffset="140" fill="transparent"/>
-                        <circle cx="50" cy="50" r="38" stroke="#f59e0b" stroke-width="12" stroke-dasharray="238.7" stroke-dashoffset="200" fill="transparent"/>
-                    </svg>
-                    <div class="absolute text-center font-mono">
-                        <div class="text-xs text-slate-400">Total Spent</div>
-                        <div class="text-xs font-black text-emerald-400">Rp {{ number_format($totalSpent, 0, ',', '.') }}</div>
-                    </div>
-                </div>
+            <div class="p-4 bg-slate-950/60 rounded-2xl border border-slate-800 flex items-center justify-center">
+                <canvas id="categoryDonutChart" class="w-full max-h-56"></canvas>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono mt-4">
                 @forelse($categoryBreakdown as $catName => $data)
                     <div class="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between items-center">
                         <span class="text-cyan-400 font-bold capitalize">{{ $catName }} ({{ $data['pct'] }}%)</span>
@@ -145,3 +89,63 @@
 
     </div>
 </div>
+
+<!-- Load Chart.js CDN and Initialize Dynamic Interactive Charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. Monthly Trend Bar Chart
+        const trendCtx = document.getElementById('monthlyTrendChart');
+        if (trendCtx) {
+            const trendData = @json($monthlyTrends);
+            new Chart(trendCtx, {
+                type: 'bar',
+                data: {
+                    labels: trendData.map(d => d.month),
+                    datasets: [{
+                        label: 'Total Pengeluaran (Rp)',
+                        data: trendData.map(d => d.spent),
+                        backgroundColor: '#10b981',
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+        }
+
+        // 2. Category Donut Chart
+        const catCtx = document.getElementById('categoryDonutChart');
+        if (catCtx) {
+            const catData = @json($categoryBreakdown);
+            const labels = Object.keys(catData);
+            const sums = labels.map(k => catData[k].sum);
+
+            new Chart(catCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: sums,
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+    });
+</script>
