@@ -54,8 +54,70 @@
     </style>
     @livewireStyles
 </head>
-<body class="h-full antialiased {{ $tokens['bg_body'] }}" x-data="{ openAddModal: false, showNotifications: false }">
+<body class="h-full antialiased {{ $tokens['bg_body'] }}" x-data="{ openAddModal: false, showNotifications: false, showMobileMenu: false }">
     <div class="min-h-screen flex flex-col md:flex-row">
+
+        <!-- MOBILE SLIDE-OVER NAVIGATION DRAWER -->
+        <div x-show="showMobileMenu" x-cloak class="fixed inset-0 z-50 md:hidden flex">
+            <div @click="showMobileMenu = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+            <div class="relative flex-1 max-w-xs w-full bg-slate-950 border-r border-slate-800 p-6 flex flex-col justify-between overflow-y-auto z-10 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-900 pb-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-black text-xs text-cyan-400">F</div>
+                        <span class="font-display font-black text-base text-white">{{ $labels['brand_name'] }}</span>
+                    </div>
+                    <button @click="showMobileMenu = false" class="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white">✕</button>
+                </div>
+
+                <nav class="space-y-1 text-xs font-bold overflow-y-auto flex-1">
+                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('dashboard') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_dashboard'] }}</span>
+                    </a>
+                    <a href="{{ route('transactions') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('transactions') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_transactions'] }}</span>
+                    </a>
+                    <a href="{{ route('accounts') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('accounts') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>👛 Rekening & Kas</span>
+                    </a>
+                    <a href="{{ route('budget') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('budget') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_budget'] }}</span>
+                    </a>
+                    <a href="{{ route('category-budgets') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('category-budgets') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>🛡️ Limit Kategori</span>
+                    </a>
+                    <a href="{{ route('subscriptions') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('subscriptions') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>🔄 Tagihan Rutin</span>
+                    </a>
+                    <a href="{{ route('financial-health') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('financial-health') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>🏥 Health Index</span>
+                    </a>
+                    <a href="{{ route('debt-planner') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('debt-planner') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>💳 Debt Planner</span>
+                    </a>
+                    <a href="{{ route('cashflow-predictor') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('cashflow-predictor') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>🔮 AI Cashflow</span>
+                    </a>
+                    <a href="{{ route('wishlist') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('wishlist') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>⏳ Cooling Wishlist</span>
+                    </a>
+                    <a href="{{ route('exchange-rates') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('exchange-rates') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>💱 Valas & Emas</span>
+                    </a>
+                    <a href="{{ route('goals') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('goals') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_goals'] }}</span>
+                    </a>
+                    <a href="{{ route('analytics') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('analytics') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_analytics'] }}</span>
+                    </a>
+                    <a href="{{ route('portfolio') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('portfolio') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>📈 Portofolio & Aset</span>
+                    </a>
+                    <a href="{{ route('challenges') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl {{ request()->routeIs('challenges') ? $tokens['badge_style'] : 'text-slate-400 hover:text-white' }}">
+                        <span>{{ $labels['nav_challenges'] }}</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
 
         <!-- DESKTOP SIDEBAR -->
         <aside class="hidden md:flex flex-col w-64 border-r border-slate-800/80 bg-slate-950/90 backdrop-blur-xl shrink-0 sticky top-0 h-screen z-40">
@@ -192,8 +254,11 @@
             <header class="{{ $tokens['header_bg'] }} border-b sticky top-0 z-30 h-16">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-4">
                     
-                    <!-- Mobile Branding -->
+                    <!-- Mobile Header Branding & Hamburger Drawer Button -->
                     <div class="flex items-center space-x-3 md:hidden">
+                        <button @click="showMobileMenu = true" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+                            <span class="text-base">☰</span>
+                        </button>
                         <div class="w-8 h-8 rounded-xl p-0.5 shadow-lg bg-gradient-to-tr from-blue-600 to-cyan-400">
                             <div class="w-full h-full bg-slate-950 rounded-[9px] flex items-center justify-center font-black text-xs text-cyan-400 font-display">
                                 F
