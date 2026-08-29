@@ -146,6 +146,16 @@ class User extends Authenticatable
         return $this->hasMany(InvestmentAsset::class);
     }
 
+    public function debts(): HasMany
+    {
+        return $this->hasMany(Debt::class);
+    }
+
+    public function bossBattles(): HasMany
+    {
+        return $this->hasMany(BossBattle::class);
+    }
+
     /**
      * Check if user is currently in critical HP status (< 20%).
      */

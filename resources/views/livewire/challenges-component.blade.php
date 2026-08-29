@@ -12,9 +12,48 @@
         <p class="text-xs text-slate-400 mt-1">Selesaikan tantangan finansial harian dan mingguan untuk mendapatkan XP dan meningkatkan reputasi.</p>
     </div>
 
-    @if ($feedbackMessage)
-        <div class="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-semibold">
-            {{ $feedbackMessage }}
+    <!-- BOSS RAID EVENT BANNER -->
+    @if($activeBoss)
+        <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-rose-950 via-slate-950 to-purple-950 border border-rose-500/50 space-y-4 shadow-2xl relative overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-mono font-bold">
+                        <span>🐉 MONTHLY BOSS RAID</span>
+                        <span>• {{ $activeBoss->month_year }}</span>
+                    </div>
+                    <h2 class="font-display font-black text-2xl text-white">{{ $activeBoss->boss_name }}</h2>
+                    <p class="text-xs text-rose-200/80">Kalahkan Boss Pengeluaran Impulsif ini dengan menyelesaikan challenge & menabung!</p>
+                </div>
+
+                <div class="text-right font-mono">
+                    <div class="text-xs text-slate-400">REWARD KEMENANGAN</div>
+                    <div class="text-xl font-black text-amber-400">+{{ number_format($activeBoss->reward_xp) }} XP</div>
+                </div>
+            </div>
+
+            <!-- Boss Health Bar -->
+            <div class="space-y-1.5">
+                <div class="flex justify-between text-xs font-mono text-slate-300">
+                    <span>STATUS HP BOSS: <strong class="{{ $activeBoss->current_hp <= 0 ? 'text-emerald-400' : 'text-rose-400' }}">{{ $activeBoss->current_hp }} / {{ $activeBoss->max_hp }} HP</strong></span>
+                    <span>{{ $activeBoss->getHpPercentage() }}% HP Remaining</span>
+                </div>
+                <div class="w-full h-4 bg-slate-950 rounded-full overflow-hidden border border-rose-900/60 p-0.5">
+                    <div class="h-full bg-gradient-to-r from-rose-600 via-red-500 to-amber-500 rounded-full transition-all duration-500" style="width: {{ $activeBoss->getHpPercentage() }}%;"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+                <span class="text-[11px] font-mono text-slate-400">Setiap Challenge memberikan 150 DMG ke Boss</span>
+                @if($activeBoss->status === 'active')
+                    <button wire:click="attackBoss" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-400 hover:to-orange-400 text-slate-950 font-bold text-xs font-mono shadow-lg transition-all">
+                        ⚔️ Serang Boss (-200 HP)
+                    </button>
+                @else
+                    <span class="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono">
+                        🏆 VICTORY DEFEATED!
+                    </span>
+                @endif
+            </div>
         </div>
     @endif
 

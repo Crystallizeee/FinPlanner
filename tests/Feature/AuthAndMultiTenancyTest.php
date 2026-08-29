@@ -217,4 +217,43 @@ class AuthAndMultiTenancyTest extends TestCase
             'current_price' => 10000,
         ]);
     }
+
+    public function test_financial_health_and_debt_planner_work_correctly(): void
+    {
+        $user = User::factory()->create();
+
+        // Financial Health Component test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\FinancialHealthComponent::class)
+            ->assertStatus(200)
+            ->assertSee('Financial Health Index');
+
+        // Debt Planner Component test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\DebtPlannerComponent::class)
+            ->set('name', 'Cicilan Mobil')
+            ->set('remaining_amount', 15000000)
+            ->set('minimum_monthly_payment', 1500000)
+            ->set('due_day', 10)
+            ->call('addDebt')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('debts', [
+            'user_id' => $user->id,
+            'name' => 'Cicilan Mobil',
+            'remaining_amount' => 15000000,
+        ]);
+
+        // Boss Battle Test in ChallengesComponent
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\ChallengesComponent::class)
+            ->call('attackBoss')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('boss_battles', [
+            'user_id' => $user->id,
+            'boss_name' => 'Impulse Spending Dragon',
+            'current_hp' => 800,
+        ]);
+    }
 }

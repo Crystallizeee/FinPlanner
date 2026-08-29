@@ -11,6 +11,8 @@ use App\Livewire\BudgetComponent;
 use App\Livewire\CategoryBudgetsComponent;
 use App\Livewire\ChallengesComponent;
 use App\Livewire\DashboardComponent;
+use App\Livewire\DebtPlannerComponent;
+use App\Livewire\FinancialHealthComponent;
 use App\Livewire\FinancialJourneyComponent;
 use App\Livewire\GoalsComponent;
 use App\Livewire\PortfolioComponent;
@@ -35,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/budget', BudgetComponent::class)->name('budget');
     Route::get('/category-budgets', CategoryBudgetsComponent::class)->name('category-budgets');
     Route::get('/subscriptions', SubscriptionsComponent::class)->name('subscriptions');
+    Route::get('/financial-health', FinancialHealthComponent::class)->name('financial-health');
+    Route::get('/debt-planner', DebtPlannerComponent::class)->name('debt-planner');
     Route::get('/goals', GoalsComponent::class)->name('goals');
     Route::get('/challenges', ChallengesComponent::class)->name('challenges');
     Route::get('/achievements', AchievementsComponent::class)->name('achievements');
