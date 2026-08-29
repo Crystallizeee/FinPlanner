@@ -12,6 +12,12 @@
         <p class="text-xs text-slate-400 mt-1">Selesaikan tantangan finansial harian dan mingguan untuk mendapatkan XP dan meningkatkan reputasi.</p>
     </div>
 
+    @if ($feedbackMessage)
+        <div class="p-4 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-semibold">
+            {{ $feedbackMessage }}
+        </div>
+    @endif
+
     <!-- DYNAMIC PERSONALIZED CHALLENGES SECTION -->
     <div class="space-y-4">
         <h2 class="{{ $tokens['font_heading'] }} text-lg text-white flex items-center space-x-2">
@@ -32,21 +38,21 @@
 
                 <div>
                     <h3 class="font-display font-bold text-base text-white">Food Spending Control</h3>
-                    <p class="text-xs text-amber-300/90 mt-1">"Food spending increased 24% compared to last week."</p>
+                    <p class="text-xs text-amber-300/90 mt-1">"Kendalikan pengeluaran makanan & kumpulkan XP bonus."</p>
                 </div>
 
                 <div class="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2 text-xs">
                     <div class="flex justify-between font-mono">
                         <span class="text-slate-400">Current Weekly Food Spend:</span>
-                        <span class="text-rose-400 font-bold">Rp 450.000</span>
+                        <span class="text-rose-400 font-bold">Rp {{ number_format($recentFoodSpent, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between font-mono">
                         <span class="text-slate-400">Target Spending (Reduce 15%):</span>
-                        <span class="text-emerald-400 font-bold">Rp 382.500</span>
+                        <span class="text-emerald-400 font-bold">Rp {{ number_format($recentFoodSpent * 0.85, 0, ',', '.') }}</span>
                     </div>
                 </div>
 
-                <button class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg">
+                <button wire:click="acceptChallenge(800)" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-lg transition-colors">
                     Accept Personalized Challenge →
                 </button>
             </div>

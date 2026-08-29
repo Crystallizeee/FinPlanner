@@ -123,29 +123,23 @@
                         <circle cx="50" cy="50" r="38" stroke="#f59e0b" stroke-width="12" stroke-dasharray="238.7" stroke-dashoffset="200" fill="transparent"/>
                     </svg>
                     <div class="absolute text-center font-mono">
-                        <div class="text-xs text-slate-400">Total</div>
-                        <div class="text-sm font-black text-white">Rp5.75M</div>
+                        <div class="text-xs text-slate-400">Total Spent</div>
+                        <div class="text-xs font-black text-emerald-400">Rp {{ number_format($totalSpent, 0, ',', '.') }}</div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div class="p-2 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
-                    <span class="text-blue-400">Food (32%)</span>
-                    <span class="text-slate-300">Rp1.8M</span>
-                </div>
-                <div class="p-2 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
-                    <span class="text-emerald-400">Transport (21%)</span>
-                    <span class="text-slate-300">Rp1.2M</span>
-                </div>
-                <div class="p-2 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
-                    <span class="text-amber-400">Entert. (18%)</span>
-                    <span class="text-slate-300">Rp1.0M</span>
-                </div>
-                <div class="p-2 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between">
-                    <span class="text-purple-400">Others (29%)</span>
-                    <span class="text-slate-300">Rp1.7M</span>
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                @forelse($categoryBreakdown as $catName => $data)
+                    <div class="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex justify-between items-center">
+                        <span class="text-cyan-400 font-bold capitalize">{{ $catName }} ({{ $data['pct'] }}%)</span>
+                        <span class="text-slate-300">Rp {{ number_format($data['sum'], 0, ',', '.') }}</span>
+                    </div>
+                @empty
+                    <div class="col-span-2 text-center text-slate-500 text-xs py-2">
+                        Belum ada transaksi pengeluaran tercatat.
+                    </div>
+                @endforelse
             </div>
         </div>
 

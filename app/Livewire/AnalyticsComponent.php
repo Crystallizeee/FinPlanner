@@ -35,15 +35,26 @@ class AnalyticsComponent extends Component
 
         $transactions = $this->user ? $this->user->expenseTransactions()->with('receipt')->latest('transaction_date')->get() : collect();
 
-        $totalSpent = $transactions->sum('amount');
+        $totalSpent = (float) $transactions->sum('amount');
         $receiptCount = $transactions->where('source', 'receipt_ocr')->count();
         $bankSyncCount = $transactions->where('source', 'bank_webhook')->count();
+
+        $categoryBreakdown = $transactions->groupBy('category')->map(function ($group) use ($totalSpent) {
+            $sum = (float) $group->sum('amount');
+            $pct = $totalSpent > 0 ? (int) round(($sum / $totalSpent) * 100) : 0;
+            return [
+                'sum' => $sum,
+                'pct' => $pct,
+                'count' => $group->count(),
+            ];
+        });
 
         return view('livewire.analytics-component', [
             'transactions' => $transactions,
             'totalSpent' => $totalSpent,
             'receiptCount' => $receiptCount,
             'bankSyncCount' => $bankSyncCount,
+            'categoryBreakdown' => $categoryBreakdown,
             'themeMode' => $themeMode,
             'labels' => $labels,
         ]);
