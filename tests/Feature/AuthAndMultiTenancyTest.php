@@ -255,5 +255,32 @@ class AuthAndMultiTenancyTest extends TestCase
             'boss_name' => 'Impulse Spending Dragon',
             'current_hp' => 800,
         ]);
+
+        // Cashflow Predictor Test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\CashflowPredictorComponent::class)
+            ->assertStatus(200)
+            ->assertSee('AI Cashflow Predictor');
+
+        // Wishlist Matrix Test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\WishlistComponent::class)
+            ->set('item_name', 'PlayStation 5')
+            ->set('price', 7500000)
+            ->set('cooling_off_days', 30)
+            ->call('addWishlist')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('wishlists', [
+            'user_id' => $user->id,
+            'item_name' => 'PlayStation 5',
+            'price' => 7500000,
+        ]);
+
+        // Exchange Rates & Gold Valuation Test
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\ExchangeRatesComponent::class)
+            ->assertStatus(200)
+            ->assertSee('Multi-Currency');
     }
 }

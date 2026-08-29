@@ -110,6 +110,18 @@
                     <span>💳 Debt Planner</span>
                 </a>
 
+                <a href="{{ route('cashflow-predictor') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('cashflow-predictor') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
+                    <span>🔮 AI Cashflow</span>
+                </a>
+
+                <a href="{{ route('wishlist') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('wishlist') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
+                    <span>⏳ Cooling Wishlist</span>
+                </a>
+
+                <a href="{{ route('exchange-rates') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('exchange-rates') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
+                    <span>💱 Valas & Emas</span>
+                </a>
+
                 <a href="{{ route('goals') }}" class="flex items-center space-x-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all {{ request()->routeIs('goals') ? $tokens['badge_style'] . ' shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/60' }}">
                     <span>{{ $labels['nav_goals'] }}</span>
                 </a>

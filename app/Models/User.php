@@ -156,6 +156,11 @@ class User extends Authenticatable
         return $this->hasMany(BossBattle::class);
     }
 
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     /**
      * Check if user is currently in critical HP status (< 20%).
      */
